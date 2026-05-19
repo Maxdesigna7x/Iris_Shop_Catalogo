@@ -15,7 +15,11 @@ RESERVED_DIRS = {"hero", "people", "piezas"}
 
 
 def is_image(path: Path) -> bool:
-    return path.is_file() and path.suffix.lower() in IMAGE_EXTENSIONS
+    return (
+        path.is_file()
+        and path.suffix.lower() in IMAGE_EXTENSIONS
+        and not path.stem.endswith("_low")
+    )
 
 
 def title_from_name(name: str) -> str:

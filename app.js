@@ -25,12 +25,56 @@ const piecesCloseButton = document.querySelector(".pieces-modal__close");
 let viewerItems = [];
 let viewerIndex = 0;
 
+const lowResSrc = (src) => src.replace(/(\.[a-z0-9]+)$/i, "_low.webp");
+
+const setProgressiveImage = (img, src, alt = "", options = {}) => {
+  img.alt = alt;
+  img.decoding = "async";
+  if (options.loading) img.loading = options.loading;
+  if (options.fetchPriority) img.fetchPriority = options.fetchPriority;
+
+  const lowSrc = lowResSrc(src);
+  img.dataset.fullSrc = src;
+  img.classList.add("is-loading-full");
+
+  const loadFull = () => {
+    if (img.dataset.fullSrc !== src) return;
+
+    const fullImage = new Image();
+    fullImage.decoding = "async";
+    fullImage.onload = () => {
+      if (img.dataset.fullSrc !== src) return;
+      img.onload = null;
+      img.onerror = null;
+      img.src = src;
+      img.classList.remove("is-loading-full");
+    };
+    fullImage.onerror = () => {
+      if (img.dataset.fullSrc !== src) return;
+      img.onload = null;
+      img.onerror = null;
+      img.src = src;
+      img.classList.remove("is-loading-full");
+    };
+    fullImage.src = src;
+  };
+
+  img.onload = loadFull;
+  img.onerror = () => {
+    if (img.dataset.fullSrc !== src) return;
+    img.onload = null;
+    img.onerror = null;
+    img.src = src;
+    img.classList.remove("is-loading-full");
+  };
+  img.src = lowSrc;
+};
+
 const syncViewer = () => {
   if (!viewerItems.length) return;
 
   const item = viewerItems[viewerIndex];
-  modalImg.src = item.src;
-  modalImg.alt = item.name || "";
+  setProgressiveImage(modalImg, item.src, item.name || "", { loading: "eager" });
   modalCaption.textContent = item.name || "";
 
   const hasMultiple = viewerItems.length > 1;
@@ -60,6 +104,9 @@ const closeModal = () => {
   if (!piecesModal.classList.contains("is-open")) {
     document.body.classList.remove("modal-open");
   }
+  modalImg.onload = null;
+  modalImg.onerror = null;
+  modalImg.dataset.fullSrc = "";
   modalImg.src = "";
   modalImg.alt = "";
   modalCaption.textContent = "";
@@ -74,9 +121,8 @@ const openPiecesModal = (category) => {
   category.items.forEach((item, index) => {
     const card = createElement("article", "product-card pieces-card");
     const img = document.createElement("img");
-    img.src = item.src;
-    img.alt = item.name;
     img.className = "openable-image";
+    setProgressiveImage(img, item.src, item.name, { loading: "lazy" });
     img.addEventListener("click", () => openModal(category.items, index));
     card.appendChild(img);
     card.appendChild(createElement("h3", "", item.name));
@@ -102,9 +148,11 @@ const renderHero = () => {
 
   data.hero.forEach((image, index) => {
     const img = document.createElement("img");
-    img.src = image.src;
-    img.alt = image.name;
     img.className = `hero__image${index === 0 ? " is-active" : ""}`;
+    setProgressiveImage(img, image.src, image.name, {
+      loading: index === 0 ? "eager" : "lazy",
+      fetchPriority: index === 0 ? "high" : "low",
+    });
     heroVisual.appendChild(img);
 
     const dot = document.createElement("span");
@@ -141,8 +189,7 @@ const renderCategories = () => {
     button.setAttribute("aria-label", `Ver piezas de ${category.title}`);
 
     const img = document.createElement("img");
-    img.src = category.icon;
-    img.alt = category.title;
+    setProgressiveImage(img, category.icon, category.title, { loading: "lazy" });
 
     button.appendChild(img);
     button.appendChild(createElement("span", "", category.title));
@@ -191,9 +238,8 @@ const renderSections = () => {
     section.items.forEach((item, index) => {
       const card = createElement("article", "product-card");
       const img = document.createElement("img");
-      img.src = item.src;
-      img.alt = item.name;
       img.className = "openable-image";
+      setProgressiveImage(img, item.src, item.name, { loading: "lazy" });
       img.addEventListener("click", () => openModal(section.items, index));
 
       card.appendChild(img);
@@ -248,8 +294,7 @@ const renderReviews = () => {
     nextButton.setAttribute("aria-label", "Siguiente reseña");
 
     const img = document.createElement("img");
-    img.src = review.image;
-    img.alt = review.person;
+    setProgressiveImage(img, review.image, review.person, { loading: "lazy" });
 
     const content = createElement("div", "testimonial__content");
     content.appendChild(createElement("div", "stars", "★".repeat(review.stars || 5)));
