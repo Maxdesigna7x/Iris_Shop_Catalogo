@@ -28,6 +28,10 @@
           "src": "assets/piezas/BOLSOS/Arena_dorada.webp"
         },
         {
+          "name": "BLAZER ESTRUCTURADO",
+          "src": "assets/piezas/BOLSOS/Blazer_Estructurado.webp"
+        },
+        {
           "name": "BOLSA ARTESANAL BEACH",
           "src": "assets/piezas/BOLSOS/Bolsa_Artesanal_Beach.webp"
         },
@@ -60,8 +64,16 @@
           "src": "assets/piezas/BOLSOS/Calado_crema.webp"
         },
         {
+          "name": "CAMISA ALGODON",
+          "src": "assets/piezas/BOLSOS/Camisa_Algodon.webp"
+        },
+        {
           "name": "CESTA PASTEL",
           "src": "assets/piezas/BOLSOS/Cesta_pastel.webp"
+        },
+        {
+          "name": "CHAQUETA TEJIDA",
+          "src": "assets/piezas/BOLSOS/Chaqueta_Tejida.webp"
         },
         {
           "name": "CROCHET AURA",
@@ -92,6 +104,10 @@
           "src": "assets/piezas/BOLSOS/Noche_elegante.webp"
         },
         {
+          "name": "PANTALON SASTRE",
+          "src": "assets/piezas/BOLSOS/Pantalon_Sastre.webp"
+        },
+        {
           "name": "PERLA ENCAJE",
           "src": "assets/piezas/BOLSOS/Perla_encaje.webp"
         },
@@ -116,6 +132,10 @@
           "src": "assets/piezas/BOLSOS/Terra_crochet.webp"
         },
         {
+          "name": "TOP HILO",
+          "src": "assets/piezas/BOLSOS/Top_Hilo.webp"
+        },
+        {
           "name": "TRICOLOR BORLAS",
           "src": "assets/piezas/BOLSOS/Tricolor_borlas.webp"
         },
@@ -126,6 +146,10 @@
         {
           "name": "VERDE SERENO",
           "src": "assets/piezas/BOLSOS/Verde_sereno.webp"
+        },
+        {
+          "name": "VESTIDO LINO",
+          "src": "assets/piezas/BOLSOS/Vestido_Lino.webp"
         }
       ]
     },
@@ -525,29 +549,204 @@
   ],
   "sections": [
     {
-      "id": "NUEVOS_FAVORITOS",
-      "title": "NUEVOS FAVORITOS",
+      "id": "ALMA_SOL",
+      "title": "ALMA SOL",
       "message": "",
       "items": [
         {
-          "name": "MAXI ARENA DORADA",
-          "src": "assets/NUEVOS_FAVORITOS/Maxi_arena_dorada.webp"
+          "name": "ALMA SERENA",
+          "src": "assets/ALMA_SOL/Alma_Serena.webp"
         },
         {
-          "name": "SET CONCHAS MAR",
-          "src": "assets/NUEVOS_FAVORITOS/Set_conchas_mar.webp"
+          "name": "AMANECER DORADO",
+          "src": "assets/ALMA_SOL/Amanecer_Dorado.webp"
         },
         {
-          "name": "SET MARINO CROCHET",
-          "src": "assets/NUEVOS_FAVORITOS/Set_marino_crochet.webp"
+          "name": "BRILLO ETERNO",
+          "src": "assets/ALMA_SOL/Brillo_Eterno.webp"
         },
         {
-          "name": "VESTIDO CALADO CREMA",
-          "src": "assets/NUEVOS_FAVORITOS/Vestido_calado_crema.webp"
+          "name": "BRISA SUTIL",
+          "src": "assets/ALMA_SOL/Brisa_Sutil.webp"
         },
         {
-          "name": "VESTIDO SOL",
-          "src": "assets/NUEVOS_FAVORITOS/Vestido_sol.webp"
+          "name": "CIELO ABIERTO",
+          "src": "assets/ALMA_SOL/Cielo_Abierto.webp"
+        },
+        {
+          "name": "CORAZON FUEGO",
+          "src": "assets/ALMA_SOL/Corazon_Fuego.webp"
+        },
+        {
+          "name": "DESPERTAR SOL",
+          "src": "assets/ALMA_SOL/Despertar_Sol.webp"
+        },
+        {
+          "name": "ESENCIA PURA",
+          "src": "assets/ALMA_SOL/Esencia_Pura.webp"
+        },
+        {
+          "name": "ESPIRITU LIBRE",
+          "src": "assets/ALMA_SOL/Espiritu_Libre.webp"
+        },
+        {
+          "name": "FUEGO INTERIOR",
+          "src": "assets/ALMA_SOL/Fuego_Interior.webp"
+        },
+        {
+          "name": "HORIZONTE NUEVO",
+          "src": "assets/ALMA_SOL/Horizonte_Nuevo.webp"
+        },
+        {
+          "name": "LUNA LLENA",
+          "src": "assets/ALMA_SOL/Luna_Llena.webp"
+        },
+        {
+          "name": "LUZ CÁLIDA",
+          "src": "assets/ALMA_SOL/Luz_Cálida.webp"
+        },
+        {
+          "name": "MELODIA SOL",
+          "src": "assets/ALMA_SOL/Melodia_Sol.webp"
+        },
+        {
+          "name": "PAZ PROFUNDA",
+          "src": "assets/ALMA_SOL/Paz_Profunda.webp"
+        },
+        {
+          "name": "RAYOS AURORA",
+          "src": "assets/ALMA_SOL/Rayos_Aurora.webp"
+        },
+        {
+          "name": "RECUERDO DORADO",
+          "src": "assets/ALMA_SOL/Recuerdo_Dorado.webp"
+        },
+        {
+          "name": "SOL NACIENTE",
+          "src": "assets/ALMA_SOL/Sol_Naciente.webp"
+        },
+        {
+          "name": "SOMBRA LUZ",
+          "src": "assets/ALMA_SOL/Sombra_Luz.webp"
+        },
+        {
+          "name": "SUSPIRO SOL",
+          "src": "assets/ALMA_SOL/Suspiro_Sol.webp"
+        },
+        {
+          "name": "ULTIMO RAYO",
+          "src": "assets/ALMA_SOL/Ultimo_Rayo.webp"
+        }
+      ]
+    },
+    {
+      "id": "OASIS_TROPICAL",
+      "title": "OASIS TROPICAL",
+      "message": "",
+      "items": [
+        {
+          "name": "ARENA DORADA",
+          "src": "assets/OASIS_TROPICAL/Arena_Dorada.webp"
+        },
+        {
+          "name": "AVE FENIX",
+          "src": "assets/OASIS_TROPICAL/Ave_Fenix.webp"
+        },
+        {
+          "name": "BRISA TROPICAL",
+          "src": "assets/OASIS_TROPICAL/Brisa_Tropical.webp"
+        },
+        {
+          "name": "CARACOLA ROSA",
+          "src": "assets/OASIS_TROPICAL/Caracola_Rosa.webp"
+        },
+        {
+          "name": "CASCADA FRESCA",
+          "src": "assets/OASIS_TROPICAL/Cascada_Fresca.webp"
+        },
+        {
+          "name": "COCO FRESCO",
+          "src": "assets/OASIS_TROPICAL/Coco_Fresco.webp"
+        },
+        {
+          "name": "COLIBRI AZUL",
+          "src": "assets/OASIS_TROPICAL/Colibri_Azul.webp"
+        },
+        {
+          "name": "DUNAS CALIDAS",
+          "src": "assets/OASIS_TROPICAL/Dunas_Calidas.webp"
+        },
+        {
+          "name": "ESTRELLA MAR",
+          "src": "assets/OASIS_TROPICAL/Estrella_Mar.webp"
+        },
+        {
+          "name": "FLOR TROPICAL",
+          "src": "assets/OASIS_TROPICAL/Flor_Tropical.webp"
+        },
+        {
+          "name": "HELICONIA FUEGO",
+          "src": "assets/OASIS_TROPICAL/Heliconia_Fuego.webp"
+        },
+        {
+          "name": "HOJA VERDE",
+          "src": "assets/OASIS_TROPICAL/Hoja_Verde.webp"
+        },
+        {
+          "name": "JARDIN SECRETO",
+          "src": "assets/OASIS_TROPICAL/Jardin_Secreto.webp"
+        },
+        {
+          "name": "LAGUNA ESMERALDA",
+          "src": "assets/OASIS_TROPICAL/Laguna_Esmeralda.webp"
+        },
+        {
+          "name": "LOTO SAGRADO",
+          "src": "assets/OASIS_TROPICAL/Loto_Sagrado.webp"
+        },
+        {
+          "name": "MANGLAR VERDE",
+          "src": "assets/OASIS_TROPICAL/Manglar_Verde.webp"
+        },
+        {
+          "name": "MAR TURQUESA",
+          "src": "assets/OASIS_TROPICAL/Mar_Turquesa.webp"
+        },
+        {
+          "name": "MARIPOSA AZUL",
+          "src": "assets/OASIS_TROPICAL/Mariposa_Azul.webp"
+        },
+        {
+          "name": "NUBE ALGODON",
+          "src": "assets/OASIS_TROPICAL/Nube_Algodon.webp"
+        },
+        {
+          "name": "OLAS ESPUMA",
+          "src": "assets/OASIS_TROPICAL/Olas_Espuma.webp"
+        },
+        {
+          "name": "ORQUIDEA ROSA",
+          "src": "assets/OASIS_TROPICAL/Orquidea_Rosa.webp"
+        },
+        {
+          "name": "PALMA VERANO",
+          "src": "assets/OASIS_TROPICAL/Palma_Verano.webp"
+        },
+        {
+          "name": "PLAYA PARAISO",
+          "src": "assets/OASIS_TROPICAL/Playa_Paraiso.webp"
+        },
+        {
+          "name": "PUESTA SOL",
+          "src": "assets/OASIS_TROPICAL/Puesta_Sol.webp"
+        },
+        {
+          "name": "SELVA FRONDOSA",
+          "src": "assets/OASIS_TROPICAL/Selva_Frondosa.webp"
+        },
+        {
+          "name": "SOL RADIANTE",
+          "src": "assets/OASIS_TROPICAL/Sol_Radiante.webp"
         }
       ]
     },
@@ -565,12 +764,20 @@
           "src": "assets/SHOP_THE_LOOK/Monocromo_rayas_chic.webp"
         },
         {
+          "name": "SET CONCHAS MAR",
+          "src": "assets/SHOP_THE_LOOK/Set_conchas_mar.webp"
+        },
+        {
           "name": "SET CROCHET CUBANO",
           "src": "assets/SHOP_THE_LOOK/Set_crochet_cubano.webp"
         },
         {
           "name": "VESTIDO ARENA DORADO",
           "src": "assets/SHOP_THE_LOOK/Vestido_arena_dorado.webp"
+        },
+        {
+          "name": "VESTIDO CALADO CREMA",
+          "src": "assets/SHOP_THE_LOOK/Vestido_calado_crema.webp"
         },
         {
           "name": "VESTIDO RESORT CROCHET",

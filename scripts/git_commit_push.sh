@@ -8,11 +8,12 @@ Usage:
   ./scripts/git_commit_push.sh "mensaje del commit"
 
 What it does:
-  - Adds tracked changes and new files in the repository root
+  - Adds new, modified, and deleted files across the repository
   - Creates a commit with the provided message
   - Pushes the current branch to origin
 
 Notes:
+  - This includes asset additions and removals under assets/.
   - The script ignores scripts/__pycache__ by default.
   - If there is nothing to commit, it exits without pushing.
 EOF
@@ -33,7 +34,7 @@ cd "$repo_root"
 
 commit_message="$*"
 
-git add -A -- .
+git add -A
 
 if git diff --cached --quiet; then
   echo "No hay cambios para commit."

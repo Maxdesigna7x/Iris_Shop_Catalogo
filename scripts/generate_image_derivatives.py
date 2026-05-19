@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
 DERIVATIVE_SUFFIXES = ("_low", "_ultra_low")
+SOURCE_WEBP_QUALITY = 75
 
 
 @dataclass(frozen=True)
@@ -65,6 +66,16 @@ def save_webp(image: Image.Image, target: Path, quality: int) -> None:
             temp_path.unlink()
 
 
+def normalize_source_image(source: Path, image: Image.Image) -> Path:
+    if source.suffix.lower() == ".webp":
+        return source
+
+    target = source.with_suffix(".webp")
+    save_webp(image, target, SOURCE_WEBP_QUALITY)
+    source.unlink()
+    return target
+
+
 def remove_existing_derivatives(source: Path) -> None:
     for variant in VARIANTS:
         target = derived_path(source, variant.suffix)
@@ -73,16 +84,17 @@ def remove_existing_derivatives(source: Path) -> None:
 
 
 def generate_for_source(source: Path) -> None:
-    remove_existing_derivatives(source)
-
     try:
         with Image.open(source) as image:
             original = image.copy()
     except UnidentifiedImageError:
         return
 
+    normalized_source = normalize_source_image(source, original)
+    remove_existing_derivatives(normalized_source)
+
     for variant in VARIANTS:
-        target = derived_path(source, variant.suffix)
+        target = derived_path(normalized_source, variant.suffix)
         resized = original.copy()
         resized = resized.resize(
             resize_dimensions(resized.size, variant.scale),
@@ -100,7 +112,10 @@ def find_sources() -> list[Path]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Generate low and ultra-low WebP derivatives for catalog images."
+        description=(
+            "Normalize source images to WebP and generate low and ultra-low "
+            "WebP derivatives for catalog images."
+        )
     )
     parser.parse_args()
 

@@ -17,6 +17,7 @@ Es una tienda tipo catálogo pensada para navegar imágenes de forma rápida y v
 Optimización de imágenes:
 
 - Las imágenes principales se recomprimieron a WebP con calidad 75.
+- Si algún archivo fuente sigue en `jpg`, `jpeg`, `png`, `gif` o `avif`, el script lo convierte a `webp` y elimina el original.
 - Para cada imagen se creó una versión de muy baja resolución en `*_ultra_low.webp` al 10% de tamaño y calidad 30.
 - Para cada imagen se creó una versión de baja resolución en `*_low.webp` al 30% de tamaño.
 - La app carga primero `*_ultra_low.webp`, después `*_low.webp` y finalmente la imagen completa en segundo plano.
