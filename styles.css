@@ -102,11 +102,16 @@ button {
   object-fit: cover;
 }
 
+.progressive-image__img--low,
 .progressive-image__img--full {
   position: absolute;
   inset: 0;
   opacity: 0;
   transition: opacity 520ms ease;
+}
+
+.progressive-image.is-low-loaded .progressive-image__img--low {
+  opacity: 1;
 }
 
 .progressive-image.is-full-loaded .progressive-image__img--full {

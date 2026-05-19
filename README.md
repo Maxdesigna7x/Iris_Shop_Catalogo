@@ -17,8 +17,10 @@ Es una tienda tipo catálogo pensada para navegar imágenes de forma rápida y v
 Optimización de imágenes:
 
 - Las imágenes principales se recomprimieron a WebP con calidad 75.
+- Para cada imagen se creó una versión de muy baja resolución en `*_ultra_low.webp` al 10% de tamaño y calidad 30.
 - Para cada imagen se creó una versión de baja resolución en `*_low.webp` al 30% de tamaño.
-- La app carga primero la versión ligera y después cambia a la imagen completa en segundo plano.
+- La app carga primero `*_ultra_low.webp`, después `*_low.webp` y finalmente la imagen completa en segundo plano.
+- En conexiones lentas o con ahorro de datos, la descarga de la imagen completa se retrasa para priorizar la carga inicial.
 
 ## Cómo se usa
 
@@ -35,7 +37,7 @@ Si agregas, quitas o cambias imágenes dentro de `assets/`, vuelve a generar los
 python3 scripts/generate_catalog.py
 ```
 
-Si además quieres mantener la misma optimización de imágenes, vuelve a comprimir los `.webp` y a generar sus versiones `*_low.webp` antes de regenerar el catálogo.
+Si además quieres mantener la misma optimización de imágenes, vuelve a comprimir los `.webp` y a generar sus versiones `*_ultra_low.webp` y `*_low.webp` antes de regenerar el catálogo.
 
 ## Despliegue
 

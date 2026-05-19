@@ -26,15 +26,68 @@ let viewerItems = [];
 let viewerIndex = 0;
 
 const lowResSrc = (src) => src.replace(/(\.[a-z0-9]+)$/i, "_low.webp");
+const ultraLowResSrc = (src) => src.replace(/(\.[a-z0-9]+)$/i, "_ultra_low.webp");
+
+const getFullImageDelay = () => {
+  const connection =
+    navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+  if (connection?.saveData) return 3500;
+  if (connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g") {
+    return 2500;
+  }
+  if (connection?.effectiveType === "3g") return 900;
+  return 0;
+};
+
+const scheduleFullImageLoad = (callback) => {
+  const delay = getFullImageDelay();
+  if (delay) {
+    window.setTimeout(callback, delay);
+    return;
+  }
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(callback, { timeout: 1200 });
+    return;
+  }
+  window.setTimeout(callback, 0);
+};
+
+const setSteppedImageSource = (img, src) =>
+  new Promise((resolve) => {
+    const loadFull = () => {
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+      img.src = src;
+    };
+
+    const loadLow = () => {
+      img.onload = () => scheduleFullImageLoad(loadFull);
+      img.onerror = () => scheduleFullImageLoad(loadFull);
+      img.src = lowResSrc(src);
+    };
+
+    img.onload = loadLow;
+    img.onerror = loadLow;
+    img.src = ultraLowResSrc(src);
+  });
 
 const createProgressiveImage = (src, alt = "", className = "", options = {}) => {
   const frame = document.createElement("span");
   frame.className = ["progressive-image", className].filter(Boolean).join(" ");
 
+  const ultraImage = document.createElement("img");
+  ultraImage.alt = alt;
+  ultraImage.decoding = "async";
+  ultraImage.className = "progressive-image__img progressive-image__img--ultra";
+  if (options.loading) ultraImage.loading = options.loading;
+  if (options.fetchPriority) ultraImage.fetchPriority = options.fetchPriority;
+
   const lowImage = document.createElement("img");
-  lowImage.alt = alt;
+  lowImage.alt = "";
   lowImage.decoding = "async";
   lowImage.className = "progressive-image__img progressive-image__img--low";
+  lowImage.setAttribute("aria-hidden", "true");
   if (options.loading) lowImage.loading = options.loading;
   if (options.fetchPriority) lowImage.fetchPriority = options.fetchPriority;
 
@@ -46,12 +99,26 @@ const createProgressiveImage = (src, alt = "", className = "", options = {}) => 
   if (options.loading) fullImage.loading = options.loading;
   if (options.fetchPriority) fullImage.fetchPriority = options.fetchPriority;
 
+  const loadFull = () => {
+    scheduleFullImageLoad(() => {
+      fullImage.src = src;
+    });
+  };
+
+  ultraImage.onload = () => {
+    lowImage.src = lowResSrc(src);
+  };
+  ultraImage.onerror = () => {
+    ultraImage.onerror = null;
+    lowImage.src = lowResSrc(src);
+  };
   lowImage.onload = () => {
-    fullImage.src = src;
+    frame.classList.add("is-low-loaded");
+    loadFull();
   };
   lowImage.onerror = () => {
     lowImage.onerror = null;
-    lowImage.src = src;
+    loadFull();
   };
   fullImage.onload = () => {
     frame.classList.add("is-full-loaded");
@@ -60,8 +127,8 @@ const createProgressiveImage = (src, alt = "", className = "", options = {}) => 
     frame.classList.add("is-full-loaded");
   };
 
-  frame.append(lowImage, fullImage);
-  lowImage.src = lowResSrc(src);
+  frame.append(ultraImage, lowImage, fullImage);
+  ultraImage.src = ultraLowResSrc(src);
   return frame;
 };
 
@@ -147,16 +214,9 @@ const renderHero = () => {
     img.fetchPriority = "high";
     img.className = `hero__image${index === 0 ? " is-active" : ""}`;
 
-    const loadPromise = new Promise((resolve) => {
-      const markReady = () => {
-        img.dataset.ready = "true";
-        resolve();
-      };
-      img.addEventListener("load", markReady, { once: true });
-      img.addEventListener("error", markReady, { once: true });
+    const loadPromise = setSteppedImageSource(img, image.src).then(() => {
+      img.dataset.ready = "true";
     });
-
-    img.src = image.src;
     heroVisual.appendChild(img);
 
     const dot = document.createElement("span");

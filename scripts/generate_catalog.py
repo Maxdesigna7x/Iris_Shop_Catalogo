@@ -12,13 +12,14 @@ JS_OUTPUT = ROOT / "catalog-data.js"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
 PIEZAS_DIR = ASSETS / "piezas"
 RESERVED_DIRS = {"hero", "people", "piezas"}
+DERIVATIVE_SUFFIXES = ("_low", "_ultra_low")
 
 
 def is_image(path: Path) -> bool:
     return (
         path.is_file()
         and path.suffix.lower() in IMAGE_EXTENSIONS
-        and not path.stem.endswith("_low")
+        and not path.stem.endswith(DERIVATIVE_SUFFIXES)
     )
 
 
