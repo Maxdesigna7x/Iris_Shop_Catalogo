@@ -356,7 +356,14 @@ const renderSections = () => {
 
     const header = createElement("div", "section-head");
     const titleGroup = createElement("div", "section-head__copy");
-    titleGroup.appendChild(createElement("h2", "", section.title));
+    const titleRow = createElement("div", "section-title-row");
+    const collectionButton = createElement("button", "collection-open-button", "+");
+    collectionButton.type = "button";
+    collectionButton.setAttribute("aria-label", `Abrir colección ${section.title}`);
+    collectionButton.addEventListener("click", () => openPiecesModal(section));
+
+    titleRow.append(collectionButton, createElement("h2", "", section.title));
+    titleGroup.appendChild(titleRow);
     if (section.message) {
       titleGroup.appendChild(createElement("p", "", section.message));
     }
