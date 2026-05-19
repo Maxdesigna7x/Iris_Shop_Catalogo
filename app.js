@@ -72,27 +72,41 @@ const preloadImage = (src) =>
     image.src = src;
   });
 
-const collectCatalogSources = () => {
-  const orderedSources = [];
+const collectPreloadGroups = () => {
   const seen = new Set();
-  const add = (src) => {
+  const createGroup = () => [];
+  const add = (group, src) => {
     if (src && !seen.has(src)) {
       seen.add(src);
-      orderedSources.push(src);
+      group.push(src);
     }
   };
 
+  const aboveFold = createGroup();
+  const sectionLeads = createGroup();
+  const reviewFaces = createGroup();
+  const rest = createGroup();
+
+  data.hero.forEach((item) => add(aboveFold, item.src));
+  data.categories.forEach((category) => add(aboveFold, category.icon));
+
   data.sections.forEach((section) => {
-    section.items.forEach((item) => add(item.src));
+    section.items.slice(0, 2).forEach((item) => add(sectionLeads, item.src));
+  });
+
+  data.reviews.forEach((review) => add(reviewFaces, review.image));
+
+  data.sections.forEach((section) => {
+    section.items.forEach((item) => add(rest, item.src));
   });
   data.categories.forEach((category) => {
-    add(category.icon);
-    category.items.forEach((item) => add(item.src));
+    category.items.forEach((item) => add(rest, item.src));
   });
-  data.hero.forEach((item) => add(item.src));
-  data.reviews.forEach((review) => add(review.image));
 
-  return orderedSources;
+  return {
+    priority: [aboveFold, sectionLeads, reviewFaces, rest],
+    all: [...aboveFold, ...sectionLeads, ...reviewFaces, ...rest],
+  };
 };
 
 const runInIdle = (callback) => {
@@ -104,11 +118,11 @@ const runInIdle = (callback) => {
 };
 
 const preloadBackgroundImages = () => {
-  const sources = collectCatalogSources();
+  const { priority, all: sources } = collectPreloadGroups();
   if (!sources.length) return;
 
   const stages = [
-    sources.map((src) => ultraLowResSrc(src)),
+    ...priority.map((group) => group.map((src) => ultraLowResSrc(src))),
     sources.map((src) => lowResSrc(src)),
     sources,
   ];
@@ -642,9 +656,4 @@ renderHero();
 renderCategories();
 renderSections();
 renderReviews();
-
-if (document.readyState === "complete") {
-  preloadBackgroundImages();
-} else {
-  window.addEventListener("load", preloadBackgroundImages, { once: true });
-}
+runInIdle(preloadBackgroundImages);
