@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Isla Clara Cuba</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <main class="content">
+        <section class="hero" aria-label="Colección destacada">
+          <div class="hero__visual" data-hero-visual></div>
+
+          <div class="hero__copy">
+            <p class="eyebrow">NUEVA COLECCIÓN</p>
+            <h1>VERANO<br />SIN FIN</h1>
+            <p class="hero__text">
+              Lino, brisa y luz cubana.<br />
+              Hecho para días dorados.
+            </p>
+          </div>
+          <div class="hero__dots" data-hero-dots aria-hidden="true"></div>
+        </section>
+
+        <section class="categories" data-categories aria-label="Categorías principales"></section>
+
+        <section class="promo">
+          <div class="promo__copy">
+            <p>COLECCIÓN VIVA</p>
+            <h2>PIEZAS PARA HABITAR EL VERANO</h2>
+            <span>TEXTURAS, LUZ Y MOVIMIENTO</span>
+          </div>
+        </section>
+
+        <div class="catalog-sections" data-sections></div>
+
+        <section class="testimonial" data-reviews-section>
+          <h2>LO QUE DICEN NUESTROS CLIENTES</h2>
+          <div class="testimonial__card" data-review-card></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="image-modal" aria-hidden="true">
+      <button class="image-modal__close" type="button" aria-label="Cerrar imagen">×</button>
+      <div class="image-modal__sheet" role="dialog" aria-modal="true">
+        <button class="image-modal__nav image-modal__nav--prev" type="button" aria-label="Imagen anterior">‹</button>
+        <div class="image-modal__media">
+          <img class="image-modal__img" alt="" />
+          <div class="image-modal__caption"></div>
+        </div>
+        <button class="image-modal__nav image-modal__nav--next" type="button" aria-label="Siguiente imagen">›</button>
+      </div>
+    </div>
+
+    <div class="pieces-modal" aria-hidden="true">
+      <button class="pieces-modal__close" type="button" aria-label="Cerrar categoría">×</button>
+      <h2 id="pieces-modal-title" class="pieces-modal__title"></h2>
+      <section class="pieces-modal__card" role="dialog" aria-modal="true" aria-labelledby="pieces-modal-title">
+        <div class="pieces-modal__grid"></div>
+      </section>
+    </div>
+
+    <script src="catalog-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

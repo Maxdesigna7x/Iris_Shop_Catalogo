@@ -1,0 +1,38 @@
+[
+  {
+    "person": "Valeria",
+    "location": "La Habana",
+    "review": "La tela es increíble y el diseño aún más lindo en persona.",
+    "stars": 5
+  },
+  {
+    "person": "Camila",
+    "location": "Varadero",
+    "review": "La caída de las piezas se siente ligera y natural.",
+    "stars": 5
+  },
+  {
+    "person": "Sofia",
+    "location": "Miami",
+    "review": "Todo tiene una paleta muy limpia y elegante.",
+    "stars": 5
+  },
+  {
+    "person": "Andrea",
+    "location": "Santiago",
+    "review": "Se ve fresco, cómodo y muy bien resuelto en conjunto.",
+    "stars": 5
+  },
+  {
+    "person": "Lucia",
+    "location": "Madrid",
+    "review": "Las fotos se ven reales y el estilo queda coherente.",
+    "stars": 5
+  },
+  {
+    "person": "Mariana",
+    "location": "Cancun",
+    "review": "Cada look tiene una intención clara y eso se nota.",
+    "stars": 5
+  }
+]
