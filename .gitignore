@@ -1,3 +1,4 @@
 test-results/
 ref.png
 original_ref.png
+__pycache__/

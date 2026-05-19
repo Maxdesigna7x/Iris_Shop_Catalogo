@@ -30,6 +30,7 @@ let swipeStartY = 0;
 let swipePointerId = null;
 let swipeTracking = false;
 let swipeMoved = false;
+let lastSwipeAt = 0;
 const swipeThreshold = 50;
 
 modalImg.draggable = false;
@@ -164,6 +165,53 @@ const showNextImage = () => {
   if (!viewerItems.length) return;
   viewerIndex = (viewerIndex + 1) % viewerItems.length;
   syncViewer();
+};
+
+const startSwipe = (x, y, pointerId = null) => {
+  if (viewerItems.length < 2) return;
+  swipePointerId = pointerId;
+  swipeStartX = x;
+  swipeStartY = y;
+  swipeTracking = true;
+  swipeMoved = false;
+};
+
+const updateSwipe = (x, y) => {
+  if (!swipeTracking) return { deltaX: 0, deltaY: 0 };
+
+  const deltaX = x - swipeStartX;
+  const deltaY = y - swipeStartY;
+  if (Math.abs(deltaX) > 8 || Math.abs(deltaY) > 8) {
+    swipeMoved = true;
+  }
+
+  return { deltaX, deltaY };
+};
+
+const finishSwipe = (x, y) => {
+  if (!swipeTracking) return;
+
+  const now = Date.now();
+  const { deltaX, deltaY } = updateSwipe(x, y);
+  const isHorizontalSwipe =
+    Math.abs(deltaX) >= swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
+
+  if (isHorizontalSwipe && now - lastSwipeAt > 350) {
+    if (deltaX < 0) {
+      showNextImage();
+    } else {
+      showPreviousImage();
+    }
+    lastSwipeAt = now;
+  }
+
+  swipeTracking = false;
+  swipePointerId = null;
+};
+
+const cancelSwipe = () => {
+  swipeTracking = false;
+  swipePointerId = null;
 };
 
 const createElement = (tag, className, text) => {
@@ -441,44 +489,48 @@ modal.addEventListener("click", (event) => {
 modalPrevButton.addEventListener("click", showPreviousImage);
 modalNextButton.addEventListener("click", showNextImage);
 modalMedia.addEventListener("pointerdown", (event) => {
-  if (viewerItems.length < 2 || event.button > 0) return;
-  swipePointerId = event.pointerId;
-  swipeStartX = event.clientX;
-  swipeStartY = event.clientY;
-  swipeTracking = true;
-  swipeMoved = false;
-  modalMedia.setPointerCapture(event.pointerId);
+  if (event.pointerType === "touch" || event.button > 0) return;
+  startSwipe(event.clientX, event.clientY, event.pointerId);
+  if (modalMedia.setPointerCapture) {
+    modalMedia.setPointerCapture(event.pointerId);
+  }
 });
 modalMedia.addEventListener("pointermove", (event) => {
   if (!swipeTracking || event.pointerId !== swipePointerId) return;
-  const deltaX = event.clientX - swipeStartX;
-  const deltaY = event.clientY - swipeStartY;
-  if (Math.abs(deltaX) > 8 || Math.abs(deltaY) > 8) {
-    swipeMoved = true;
-  }
+  updateSwipe(event.clientX, event.clientY);
 });
 modalMedia.addEventListener("pointerup", (event) => {
   if (!swipeTracking || event.pointerId !== swipePointerId) return;
-  const deltaX = event.clientX - swipeStartX;
-  const deltaY = event.clientY - swipeStartY;
-  const isHorizontalSwipe =
-    Math.abs(deltaX) >= swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
-
-  if (isHorizontalSwipe) {
-    if (deltaX < 0) {
-      showNextImage();
-    } else {
-      showPreviousImage();
+  finishSwipe(event.clientX, event.clientY);
+});
+modalMedia.addEventListener("pointercancel", cancelSwipe);
+modalMedia.addEventListener(
+  "touchstart",
+  (event) => {
+    if (event.touches.length !== 1) return;
+    const touch = event.touches[0];
+    startSwipe(touch.clientX, touch.clientY);
+  },
+  { passive: true },
+);
+modalMedia.addEventListener(
+  "touchmove",
+  (event) => {
+    if (!swipeTracking || event.touches.length !== 1) return;
+    const touch = event.touches[0];
+    const { deltaX, deltaY } = updateSwipe(touch.clientX, touch.clientY);
+    if (Math.abs(deltaX) > 8 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      event.preventDefault();
     }
-  }
-
-  swipeTracking = false;
-  swipePointerId = null;
+  },
+  { passive: false },
+);
+modalMedia.addEventListener("touchend", (event) => {
+  if (!swipeTracking || event.changedTouches.length < 1) return;
+  const touch = event.changedTouches[0];
+  finishSwipe(touch.clientX, touch.clientY);
 });
-modalMedia.addEventListener("pointercancel", () => {
-  swipeTracking = false;
-  swipePointerId = null;
-});
+modalMedia.addEventListener("touchcancel", cancelSwipe);
 modalMedia.addEventListener("click", (event) => {
   if (!swipeMoved) return;
   event.preventDefault();

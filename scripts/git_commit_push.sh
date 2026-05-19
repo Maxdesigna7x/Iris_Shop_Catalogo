@@ -33,7 +33,7 @@ cd "$repo_root"
 
 commit_message="$*"
 
-git add -A -- . ':(exclude)scripts/__pycache__'
+git add -A -- .
 
 if git diff --cached --quiet; then
   echo "No hay cambios para commit."
