@@ -12,6 +12,7 @@ const sectionsRoot = document.querySelector("[data-sections]");
 const reviewCard = document.querySelector("[data-review-card]");
 const reviewsSection = document.querySelector("[data-reviews-section]");
 const modal = document.querySelector(".image-modal");
+const modalMedia = document.querySelector(".image-modal__media");
 const modalImg = document.querySelector(".image-modal__img");
 const modalCaption = document.querySelector(".image-modal__caption");
 const modalPrevButton = document.querySelector(".image-modal__nav--prev");
@@ -24,6 +25,14 @@ const piecesModalGrid = document.querySelector(".pieces-modal__grid");
 const piecesCloseButton = document.querySelector(".pieces-modal__close");
 let viewerItems = [];
 let viewerIndex = 0;
+let swipeStartX = 0;
+let swipeStartY = 0;
+let swipePointerId = null;
+let swipeTracking = false;
+let swipeMoved = false;
+const swipeThreshold = 50;
+
+modalImg.draggable = false;
 
 const lowResSrc = (src) => src.replace(/(\.[a-z0-9]+)$/i, "_low.webp");
 const ultraLowResSrc = (src) => src.replace(/(\.[a-z0-9]+)$/i, "_ultra_low.webp");
@@ -143,6 +152,18 @@ const syncViewer = () => {
   const hasMultiple = viewerItems.length > 1;
   modalPrevButton.hidden = !hasMultiple;
   modalNextButton.hidden = !hasMultiple;
+};
+
+const showPreviousImage = () => {
+  if (!viewerItems.length) return;
+  viewerIndex = (viewerIndex - 1 + viewerItems.length) % viewerItems.length;
+  syncViewer();
+};
+
+const showNextImage = () => {
+  if (!viewerItems.length) return;
+  viewerIndex = (viewerIndex + 1) % viewerItems.length;
+  syncViewer();
 };
 
 const createElement = (tag, className, text) => {
@@ -417,15 +438,51 @@ closeButton.addEventListener("click", closeModal);
 modal.addEventListener("click", (event) => {
   if (event.target === modal) closeModal();
 });
-modalPrevButton.addEventListener("click", () => {
-  if (!viewerItems.length) return;
-  viewerIndex = (viewerIndex - 1 + viewerItems.length) % viewerItems.length;
-  syncViewer();
+modalPrevButton.addEventListener("click", showPreviousImage);
+modalNextButton.addEventListener("click", showNextImage);
+modalMedia.addEventListener("pointerdown", (event) => {
+  if (viewerItems.length < 2 || event.button > 0) return;
+  swipePointerId = event.pointerId;
+  swipeStartX = event.clientX;
+  swipeStartY = event.clientY;
+  swipeTracking = true;
+  swipeMoved = false;
+  modalMedia.setPointerCapture(event.pointerId);
 });
-modalNextButton.addEventListener("click", () => {
-  if (!viewerItems.length) return;
-  viewerIndex = (viewerIndex + 1) % viewerItems.length;
-  syncViewer();
+modalMedia.addEventListener("pointermove", (event) => {
+  if (!swipeTracking || event.pointerId !== swipePointerId) return;
+  const deltaX = event.clientX - swipeStartX;
+  const deltaY = event.clientY - swipeStartY;
+  if (Math.abs(deltaX) > 8 || Math.abs(deltaY) > 8) {
+    swipeMoved = true;
+  }
+});
+modalMedia.addEventListener("pointerup", (event) => {
+  if (!swipeTracking || event.pointerId !== swipePointerId) return;
+  const deltaX = event.clientX - swipeStartX;
+  const deltaY = event.clientY - swipeStartY;
+  const isHorizontalSwipe =
+    Math.abs(deltaX) >= swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
+
+  if (isHorizontalSwipe) {
+    if (deltaX < 0) {
+      showNextImage();
+    } else {
+      showPreviousImage();
+    }
+  }
+
+  swipeTracking = false;
+  swipePointerId = null;
+});
+modalMedia.addEventListener("pointercancel", () => {
+  swipeTracking = false;
+  swipePointerId = null;
+});
+modalMedia.addEventListener("click", (event) => {
+  if (!swipeMoved) return;
+  event.preventDefault();
+  swipeMoved = false;
 });
 piecesCloseButton.addEventListener("click", closePiecesModal);
 piecesModalCard.addEventListener("click", (event) => {

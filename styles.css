@@ -771,6 +771,7 @@ button {
   gap: 10px;
   justify-items: center;
   max-width: 100%;
+  touch-action: pan-y;
 }
 
 .image-modal__img {
@@ -782,6 +783,7 @@ button {
   border-radius: 22px;
   box-shadow: 0 30px 90px rgba(58, 44, 32, 0.3);
   background: rgba(255, 250, 244, 0.18);
+  user-select: none;
 }
 
 .image-modal__caption {
