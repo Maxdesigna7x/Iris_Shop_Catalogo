@@ -142,10 +142,6 @@ button {
 }
 
 .theme-toggle {
-  position: fixed;
-  top: max(12px, env(safe-area-inset-top));
-  right: max(12px, env(safe-area-inset-right));
-  z-index: 80;
   width: 42px;
   height: 42px;
   display: grid;
@@ -158,6 +154,13 @@ button {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   cursor: pointer;
+}
+
+.hero .theme-toggle {
+  position: absolute;
+  top: clamp(22px, 7vh, 84px);
+  right: clamp(16px, 5vw, 48px);
+  z-index: 3;
 }
 
 .theme-toggle__icon {
@@ -643,6 +646,11 @@ button {
     aspect-ratio: 2912 / 1464;
   }
 
+  .hero .theme-toggle {
+    top: 12px;
+    right: 12px;
+  }
+
   .hero__copy {
     top: 16px;
     left: 14px;
@@ -680,6 +688,11 @@ button {
 
   .hero {
     border-radius: 22px;
+  }
+
+  .hero .theme-toggle {
+    top: 12px;
+    right: 12px;
   }
 
   .hero__copy {
