@@ -78,11 +78,13 @@ button {
   object-fit: cover;
   object-position: 58% center;
   display: block;
+  z-index: 0;
   opacity: 0;
   transition: opacity 1200ms ease;
 }
 
 .hero__image.is-active {
+  z-index: 1;
   opacity: 1;
 }
 
@@ -109,10 +111,6 @@ button {
 
 .progressive-image.is-full-loaded .progressive-image__img--full {
   opacity: 1;
-}
-
-.hero__image .progressive-image__img {
-  object-position: 58% center;
 }
 
 .hero__copy {

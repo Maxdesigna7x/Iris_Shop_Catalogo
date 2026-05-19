@@ -145,36 +145,47 @@ const closePiecesModal = () => {
 const renderHero = () => {
   if (!heroVisual || !data.hero.length) return;
 
-  data.hero.forEach((image, index) => {
-    const img = createProgressiveImage(
-      image.src,
-      image.name,
-      `hero__image${index === 0 ? " is-active" : ""}`,
-      {
-        loading: index === 0 ? "eager" : "lazy",
-        fetchPriority: index === 0 ? "high" : "low",
-      },
-    );
+  const loadPromises = data.hero.map((image, index) => {
+    const img = document.createElement("img");
+    img.alt = image.name;
+    img.decoding = "async";
+    img.loading = "eager";
+    img.fetchPriority = "high";
+    img.className = `hero__image${index === 0 ? " is-active" : ""}`;
+
+    const loadPromise = new Promise((resolve) => {
+      const markReady = () => {
+        img.dataset.ready = "true";
+        resolve();
+      };
+      img.addEventListener("load", markReady, { once: true });
+      img.addEventListener("error", markReady, { once: true });
+    });
+
+    img.src = image.src;
     heroVisual.appendChild(img);
 
     const dot = document.createElement("span");
     if (index === 0) dot.classList.add("active");
     heroDots.appendChild(dot);
+    return loadPromise;
   });
 
   if (data.hero.length < 2) return;
 
-  let activeIndex = 0;
-  const images = heroVisual.querySelectorAll(".hero__image");
-  const dots = heroDots.querySelectorAll("span");
+  Promise.all(loadPromises).then(() => {
+    let activeIndex = 0;
+    const images = heroVisual.querySelectorAll(".hero__image");
+    const dots = heroDots.querySelectorAll("span");
 
-  window.setInterval(() => {
-    images[activeIndex].classList.remove("is-active");
-    dots[activeIndex].classList.remove("active");
-    activeIndex = (activeIndex + 1) % images.length;
-    images[activeIndex].classList.add("is-active");
-    dots[activeIndex].classList.add("active");
-  }, 4500);
+    window.setInterval(() => {
+      images[activeIndex].classList.remove("is-active");
+      dots[activeIndex].classList.remove("active");
+      activeIndex = (activeIndex + 1) % images.length;
+      images[activeIndex].classList.add("is-active");
+      dots[activeIndex].classList.add("active");
+    }, 4500);
+  });
 };
 
 const renderCategories = () => {
