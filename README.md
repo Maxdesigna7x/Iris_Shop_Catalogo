@@ -37,6 +37,12 @@ Si agregas, quitas o cambias imágenes dentro de `assets/`, vuelve a generar los
 python3 scripts/generate_catalog.py
 ```
 
+Si quieres regenerar las versiones `*_ultra_low.webp` y `*_low.webp`, ejecuta primero:
+
+```bash
+python3 scripts/generate_image_derivatives.py
+```
+
 Si además quieres mantener la misma optimización de imágenes, vuelve a comprimir los `.webp` y a generar sus versiones `*_ultra_low.webp` y `*_low.webp` antes de regenerar el catálogo.
 
 ## Despliegue
