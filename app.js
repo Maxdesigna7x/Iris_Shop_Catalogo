@@ -63,6 +63,78 @@ const scheduleFullImageLoad = (callback) => {
   window.setTimeout(callback, 0);
 };
 
+const preloadImage = (src) =>
+  new Promise((resolve) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => resolve();
+    image.onerror = () => resolve();
+    image.src = src;
+  });
+
+const collectCatalogSources = () => {
+  const sources = new Set();
+  const add = (src) => {
+    if (src) sources.add(src);
+  };
+
+  data.hero.forEach((item) => add(item.src));
+  data.categories.forEach((category) => {
+    add(category.icon);
+    category.items.forEach((item) => add(item.src));
+  });
+  data.sections.forEach((section) => {
+    section.items.forEach((item) => add(item.src));
+  });
+  data.reviews.forEach((review) => add(review.image));
+
+  return [...sources];
+};
+
+const runInIdle = (callback) => {
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(callback, { timeout: 1500 });
+    return;
+  }
+  window.setTimeout(callback, 0);
+};
+
+const preloadBackgroundImages = () => {
+  const sources = collectCatalogSources();
+  if (!sources.length) return;
+
+  const stages = [
+    sources.map((src) => ultraLowResSrc(src)),
+    sources.map((src) => lowResSrc(src)),
+    sources,
+  ];
+
+  const preloadStage = (stageIndex) => {
+    if (stageIndex >= stages.length) return;
+
+    const queue = [...new Set(stages[stageIndex])];
+    let cursor = 0;
+
+    const pump = (deadline) => {
+      while (cursor < queue.length) {
+        if (deadline && typeof deadline.timeRemaining === "function" && deadline.timeRemaining() < 8) {
+          runInIdle(() => pump());
+          return;
+        }
+
+        preloadImage(queue[cursor]);
+        cursor += 1;
+      }
+
+      preloadStage(stageIndex + 1);
+    };
+
+    runInIdle((deadline) => pump(deadline));
+  };
+
+  preloadStage(0);
+};
+
 const setSteppedImageSource = (img, src) =>
   new Promise((resolve) => {
     const loadFull = () => {
@@ -566,3 +638,9 @@ renderHero();
 renderCategories();
 renderSections();
 renderReviews();
+
+if (document.readyState === "complete") {
+  preloadBackgroundImages();
+} else {
+  window.addEventListener("load", preloadBackgroundImages, { once: true });
+}
