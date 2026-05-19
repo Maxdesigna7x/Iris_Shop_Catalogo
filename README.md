@@ -45,6 +45,16 @@ python3 scripts/generate_image_derivatives.py
 
 Si además quieres mantener la misma optimización de imágenes, vuelve a comprimir los `.webp` y a generar sus versiones `*_ultra_low.webp` y `*_low.webp` antes de regenerar el catálogo.
 
+## Git rápido
+
+Para hacer `add + commit + push` en un solo paso:
+
+```bash
+./scripts/git_commit_push.sh "mensaje del commit"
+```
+
+El script ignora `scripts/__pycache__/` para no arrastrar artefactos generados.
+
 ## Despliegue
 
 El proyecto no necesita backend. Basta con subir los archivos estáticos al repositorio o servirlos desde cualquier hosting estático.
