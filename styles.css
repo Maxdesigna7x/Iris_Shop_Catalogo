@@ -769,25 +769,14 @@ button {
 }
 
 .image-modal__img {
-  display: inline-block;
   width: auto;
   height: auto;
   max-width: min(100%, 820px);
   max-height: 74vh;
+  object-fit: contain;
   border-radius: 22px;
   box-shadow: 0 30px 90px rgba(58, 44, 32, 0.3);
   background: rgba(255, 250, 244, 0.18);
-}
-
-.image-modal__img .progressive-image__img {
-  object-fit: contain;
-}
-
-.image-modal__img .progressive-image__img--low {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: inherit;
 }
 
 .image-modal__caption {

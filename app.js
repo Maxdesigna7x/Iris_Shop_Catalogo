@@ -13,7 +13,6 @@ const reviewCard = document.querySelector("[data-review-card]");
 const reviewsSection = document.querySelector("[data-reviews-section]");
 const modal = document.querySelector(".image-modal");
 const modalImg = document.querySelector(".image-modal__img");
-const modalMedia = document.querySelector(".image-modal__media");
 const modalCaption = document.querySelector(".image-modal__caption");
 const modalPrevButton = document.querySelector(".image-modal__nav--prev");
 const modalNextButton = document.querySelector(".image-modal__nav--next");
@@ -23,10 +22,8 @@ const piecesModalCard = document.querySelector(".pieces-modal__card");
 const piecesModalTitle = document.querySelector(".pieces-modal__title");
 const piecesModalGrid = document.querySelector(".pieces-modal__grid");
 const piecesCloseButton = document.querySelector(".pieces-modal__close");
-if (modalImg) modalImg.remove();
 let viewerItems = [];
 let viewerIndex = 0;
-let modalImageFrame = null;
 
 const lowResSrc = (src) => src.replace(/(\.[a-z0-9]+)$/i, "_low.webp");
 
@@ -72,11 +69,8 @@ const syncViewer = () => {
   if (!viewerItems.length) return;
 
   const item = viewerItems[viewerIndex];
-  if (modalImageFrame) modalImageFrame.remove();
-  modalImageFrame = createProgressiveImage(item.src, item.name || "", "image-modal__img", {
-    loading: "eager",
-  });
-  modalMedia.insertBefore(modalImageFrame, modalCaption);
+  modalImg.src = item.src;
+  modalImg.alt = item.name || "";
   modalCaption.textContent = item.name || "";
 
   const hasMultiple = viewerItems.length > 1;
@@ -106,8 +100,8 @@ const closeModal = () => {
   if (!piecesModal.classList.contains("is-open")) {
     document.body.classList.remove("modal-open");
   }
-  if (modalImageFrame) modalImageFrame.remove();
-  modalImageFrame = null;
+  modalImg.src = "";
+  modalImg.alt = "";
   modalCaption.textContent = "";
   viewerItems = [];
   viewerIndex = 0;
