@@ -23,6 +23,9 @@ const piecesModalCard = document.querySelector(".pieces-modal__card");
 const piecesModalTitle = document.querySelector(".pieces-modal__title");
 const piecesModalGrid = document.querySelector(".pieces-modal__grid");
 const piecesCloseButton = document.querySelector(".pieces-modal__close");
+const themeToggle = document.querySelector(".theme-toggle");
+const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+const darkSchemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 let viewerItems = [];
 let viewerIndex = 0;
 let swipeStartX = 0;
@@ -34,6 +37,65 @@ let lastSwipeAt = 0;
 const swipeThreshold = 50;
 
 modalImg.draggable = false;
+
+const getStoredTheme = () => {
+  try {
+    const theme = localStorage.getItem("isla-theme");
+    return theme === "dark" || theme === "light" ? theme : null;
+  } catch {
+    return null;
+  }
+};
+
+const saveTheme = (theme) => {
+  try {
+    localStorage.setItem("isla-theme", theme);
+  } catch {
+    // Manual theme still works for the current page even if storage is blocked.
+  }
+};
+
+const getEffectiveTheme = () =>
+  document.documentElement.dataset.theme || (darkSchemeQuery.matches ? "dark" : "light");
+
+const syncThemeControl = () => {
+  const theme = getEffectiveTheme();
+  const isDark = theme === "dark";
+  if (themeColorMeta) {
+    themeColorMeta.content = isDark ? "#262522" : "#f6f0e8";
+  }
+  if (!themeToggle) return;
+  themeToggle.setAttribute("aria-pressed", String(isDark));
+  themeToggle.setAttribute(
+    "aria-label",
+    isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro",
+  );
+};
+
+const setTheme = (theme) => {
+  document.documentElement.dataset.theme = theme;
+  saveTheme(theme);
+  syncThemeControl();
+};
+
+const initThemeToggle = () => {
+  syncThemeControl();
+  if (!themeToggle) return;
+
+  themeToggle.addEventListener("click", () => {
+    setTheme(getEffectiveTheme() === "dark" ? "light" : "dark");
+  });
+
+  const onSchemeChange = () => {
+    if (!getStoredTheme()) syncThemeControl();
+  };
+
+  if (darkSchemeQuery.addEventListener) {
+    darkSchemeQuery.addEventListener("change", onSchemeChange);
+  } else if (darkSchemeQuery.addListener) {
+    darkSchemeQuery.addListener(onSchemeChange);
+  }
+};
 
 const lowResSrc = (src) => src.replace(/(\.[a-z0-9]+)$/i, "_low.webp");
 const ultraLowResSrc = (src) => src.replace(/(\.[a-z0-9]+)$/i, "_ultra_low.webp");
@@ -652,6 +714,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+initThemeToggle();
 renderHero();
 renderCategories();
 renderSections();

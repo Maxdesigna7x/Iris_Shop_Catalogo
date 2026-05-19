@@ -4,15 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Isla Clara Cuba</title>
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f0e8" />
+    <script>
+      (() => {
+        try {
+          const storedTheme = localStorage.getItem("isla-theme");
+          if (storedTheme === "light" || storedTheme === "dark") {
+            document.documentElement.dataset.theme = storedTheme;
+          }
+        } catch {
+          // If storage is unavailable, the CSS system preference still applies.
+        }
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=20260519-collection-button" />
+    <link rel="stylesheet" href="styles.css?v=20260519-theme-toggle" />
   </head>
   <body>
+    <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro" aria-pressed="false">
+      <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.7-5.7 1.4-1.4M4.9 19.1l1.4-1.4m0-11.4L4.9 4.9m14.2 14.2-1.4-1.4" />
+        <circle cx="12" cy="12" r="4" />
+      </svg>
+      <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 14.2A7.6 7.6 0 0 1 9.8 3 8.8 8.8 0 1 0 21 14.2Z" />
+      </svg>
+    </button>
     <div class="page-shell">
       <main class="content">
         <section class="hero" aria-label="Colección destacada">
@@ -68,7 +91,7 @@
       </section>
     </div>
 
-    <script src="catalog-data.js?v=20260519-collection-button"></script>
-    <script src="app.js?v=20260519-collection-button"></script>
+    <script src="catalog-data.js?v=20260519-theme-toggle"></script>
+    <script src="app.js?v=20260519-theme-toggle"></script>
   </body>
 </html>
