@@ -73,22 +73,26 @@ const preloadImage = (src) =>
   });
 
 const collectCatalogSources = () => {
-  const sources = new Set();
+  const orderedSources = [];
+  const seen = new Set();
   const add = (src) => {
-    if (src) sources.add(src);
+    if (src && !seen.has(src)) {
+      seen.add(src);
+      orderedSources.push(src);
+    }
   };
 
-  data.hero.forEach((item) => add(item.src));
+  data.sections.forEach((section) => {
+    section.items.forEach((item) => add(item.src));
+  });
   data.categories.forEach((category) => {
     add(category.icon);
     category.items.forEach((item) => add(item.src));
   });
-  data.sections.forEach((section) => {
-    section.items.forEach((item) => add(item.src));
-  });
+  data.hero.forEach((item) => add(item.src));
   data.reviews.forEach((review) => add(review.image));
 
-  return [...sources];
+  return orderedSources;
 };
 
 const runInIdle = (callback) => {
