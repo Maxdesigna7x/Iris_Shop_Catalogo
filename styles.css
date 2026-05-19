@@ -86,6 +86,35 @@ button {
   opacity: 1;
 }
 
+.progressive-image {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: rgba(255, 250, 244, 0.28);
+}
+
+.progressive-image__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.progressive-image__img--full {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 520ms ease;
+}
+
+.progressive-image.is-full-loaded .progressive-image__img--full {
+  opacity: 1;
+}
+
+.hero__image .progressive-image__img {
+  object-position: 58% center;
+}
+
 .hero__copy {
   position: absolute;
   left: clamp(16px, 5vw, 48px);
@@ -176,12 +205,11 @@ button {
   cursor: pointer;
 }
 
-.category img {
+.category .progressive-image {
   width: 100%;
   aspect-ratio: 1;
   max-width: 86px;
   border-radius: 999px;
-  object-fit: cover;
   box-shadow: 0 8px 18px rgba(89, 71, 48, 0.12);
 }
 
@@ -259,12 +287,10 @@ button {
   scroll-snap-align: start;
 }
 
-.product-card img {
+.product-card .progressive-image {
   width: 100%;
   aspect-ratio: 0.88;
   border-radius: 18px;
-  object-fit: cover;
-  display: block;
   box-shadow: var(--shadow);
 }
 
@@ -385,11 +411,11 @@ button {
   stroke-linejoin: round;
 }
 
-.testimonial__card img {
+.testimonial__card .progressive-image {
   width: 64px;
   height: 64px;
   border-radius: 999px;
-  object-fit: cover;
+  flex: 0 0 auto;
   border: 4px solid rgba(255, 248, 242, 0.96);
   box-shadow: 0 12px 24px rgba(79, 58, 36, 0.1);
 }
@@ -514,7 +540,7 @@ button {
     gap: 7px;
   }
 
-  .category img {
+  .category .progressive-image {
     max-width: 62px;
   }
 
@@ -527,7 +553,7 @@ button {
     gap: 8px;
   }
 
-  .testimonial__card img {
+  .testimonial__card .progressive-image {
     width: 58px;
     height: 58px;
   }
@@ -724,7 +750,7 @@ button {
   font-weight: 500;
 }
 
-.pieces-card img {
+.pieces-card .progressive-image {
   box-shadow: 0 10px 26px rgba(58, 44, 32, 0.13);
 }
 
@@ -745,14 +771,25 @@ button {
 }
 
 .image-modal__img {
+  display: inline-block;
   width: auto;
   height: auto;
   max-width: min(100%, 820px);
   max-height: 74vh;
-  object-fit: contain;
   border-radius: 22px;
   box-shadow: 0 30px 90px rgba(58, 44, 32, 0.3);
   background: rgba(255, 250, 244, 0.18);
+}
+
+.image-modal__img .progressive-image__img {
+  object-fit: contain;
+}
+
+.image-modal__img .progressive-image__img--low {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: inherit;
 }
 
 .image-modal__caption {
